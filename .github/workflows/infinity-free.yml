@@ -45,8 +45,8 @@ jobs:
         run: |
           printf "%s" "${{ secrets.LARAVEL_ENV }}" > deploy/laravel-app/.env
 
-      - name: Deploy HTDOCS via FTP
-        uses: samkirkland/FTP-Deploy-Action@v4
+            - name: Deploy HTDOCS via FTP
+        uses: samkirkland/FTP-Deploy-Action@main
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
@@ -57,7 +57,7 @@ jobs:
           dangerous-clean-slate: true
 
       - name: Deploy Laravel core via FTP
-        uses: samkirkland/FTP-Deploy-Action@v3
+        uses: samkirkland/FTP-Deploy-Action@main
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
