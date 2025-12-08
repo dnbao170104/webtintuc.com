@@ -1,67 +1,29 @@
-name: Deploy Laravel to InfinityFree
+name: Deploy to InfinityFree
 
+# Run manually or on push to the main branch
 on:
+  workflow_dispatch:
   push:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
   deploy:
+    name: Deploy via FTP
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      # Step 1: Clone the latest code from GitHub
+      - name: Get latest code
         uses: actions/checkout@v4
 
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+      # Step 2: Upload code via FTP
+      - name: Deploy to InfinityFree via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          php-version: "8.2"
-          extensions: mbstring, intl, pdo_mysql
-          coverage: none
-
-      - name: Install Composer dependencies
-        run: composer install --no-dev --prefer-dist --optimize-autoloader
-
-      - name: Build Laravel caches
-        run: |
-          php artisan config:cache
-          php artisan route:cache
-          php artisan view:cache
-
-      - name: Prepare deploy folders
-        run: |
-          mkdir -p deploy/htdocs
-          mkdir -p deploy/laravel-app
-          rsync -av --delete public/ deploy/htdocs/
-          sed -i "s|require __DIR__.'/../vendor/autoload.php'|require __DIR__.'/../laravel-app/vendor/autoload.php'|g" deploy/htdocs/index.php
-          sed -i "s|\$app = require_once __DIR__.'/../bootstrap/app.php'|\$app = require_once __DIR__.'/../laravel-app/bootstrap/app.php'|g" deploy/htdocs/index.php
-          rsync -av --delete \
-            --exclude='public' \
-            --exclude='node_modules' \
-            --exclude='.git' \
-            ./ deploy/laravel-app/
-
-      - name: Inject .env from secrets
-        run: |
-          printf "%s" "${{ secrets.LARAVEL_ENV }}" > deploy/laravel-app/.env
-
-            - name: Deploy HTDOCS via FTP
-        uses: samkirkland/FTP-Deploy-Action@main
-        with:
-          server: ${{ secrets.FTP_SERVER }}
+          server: stutintuc.click
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          protocol: ftp
-          local-dir: deploy/htdocs
-          server-dir: ${{ secrets.FTP_SERVER_DIR_HTDOCS }}
-          dangerous-clean-slate: true
-
-      - name: Deploy Laravel core via FTP
-        uses: samkirkland/FTP-Deploy-Action@main
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          protocol: ftp
-          local-dir: deploy/laravel-app
-          server-dir: ${{ secrets.FTP_SERVER_DIR_APP }}
+          server-dir: /yourdomain.com/htdocs/ # For addon domains
+          timeout: 86400000
+          log-level: standard
