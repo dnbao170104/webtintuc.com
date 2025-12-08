@@ -46,7 +46,7 @@ jobs:
           printf "%s" "${{ secrets.LARAVEL_ENV }}" > deploy/laravel-app/.env
 
       - name: Deploy HTDOCS via FTP
-        uses: samkirkland/FTP-Deploy-Action@v3
+        uses: samkirkland/FTP-Deploy-Action@v4
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
