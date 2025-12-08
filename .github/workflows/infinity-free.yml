@@ -20,6 +20,10 @@ jobs:
           coverage: none
 
       - name: Install Composer dependencies
+        env:
+          COMPOSER_PROCESS_TIMEOUT: 0
+          COMPOSER_NO_INTERACTION: 1
+          COMPOSER_NO_AUDIT: 1
         run: composer install --no-dev --prefer-dist --optimize-autoloader
 
       - name: Build Laravel caches
@@ -61,7 +65,6 @@ jobs:
           protocol: ftp
           local-dir: deploy/htdocs
           server-dir: /htdocs
-          # Tuỳ chọn: xóa file thừa trên server để đồng bộ sạch
           dangerous-clean-slate: true
 
       - name: Deploy Laravel core via FTP
