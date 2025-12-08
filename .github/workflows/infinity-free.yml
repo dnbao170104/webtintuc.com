@@ -38,12 +38,21 @@ jobs:
           mkdir -p deploy/htdocs
           mkdir -p deploy/laravel-app
 
+          echo "📂 Kiểm tra thư mục public/"
+          ls -la public/
+
           # Copy public vào htdocs (giữ .htaccess, index.php)
           rsync -av --delete public/ deploy/htdocs/
+
+          echo "📂 Kiểm tra deploy/htdocs sau khi copy"
+          ls -la deploy/htdocs/
 
           # Sửa index.php để trỏ tới /laravel-app
           sed -i "s|require __DIR__.'/../vendor/autoload.php'|require __DIR__.'/../laravel-app/vendor/autoload.php'|g" deploy/htdocs/index.php
           sed -i "s|\$app = require_once __DIR__.'/../bootstrap/app.php'|\$app = require_once __DIR__.'/../laravel-app/bootstrap/app.php'|g" deploy/htdocs/index.php
+
+          echo "📄 Nội dung index.php sau khi sửa:"
+          head -n 20 deploy/htdocs/index.php
 
           # Copy core Laravel (trừ public và các thư mục không cần)
           rsync -av --delete \
@@ -52,9 +61,16 @@ jobs:
             --exclude='.git' \
             ./ deploy/laravel-app/
 
+          echo "📂 Kiểm tra deploy/laravel-app"
+          ls -la deploy/laravel-app/
+
       - name: Inject .env from secrets
         run: |
           printf "%s" "${{ secrets.LARAVEL_ENV }}" > deploy/laravel-app/.env
+          echo "📄 .env đã được tạo trong deploy/laravel-app"
+
+      - name: Debug vendor folder
+        run: ls -la deploy/laravel-app/vendor/ || echo "⚠️ Vendor folder không tồn tại!"
 
       - name: Deploy HTDOCS via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
