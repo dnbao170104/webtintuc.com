@@ -60,7 +60,7 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: ftp
           local-dir: deploy/htdocs
-          server-dir: ${{ secrets.FTP_SERVER_DIR_HTDOCS }}
+          server-dir: /stutintuc.click/htdocs/
           # Tuỳ chọn: xóa file thừa trên server để đồng bộ sạch
           dangerous-clean-slate: true
 
@@ -72,4 +72,4 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: ftp
           local-dir: deploy/laravel-app
-          server-dir: ${{ secrets.FTP_SERVER_DIR_APP }}
+          server-dir: /stutintuc.click/laravel-app/
