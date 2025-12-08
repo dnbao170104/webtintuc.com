@@ -9,8 +9,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout code with full history
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -32,36 +34,39 @@ jobs:
           php artisan route:cache
           php artisan view:cache
 
+      - name: Debug repo structure
+        run: |
+          echo "📁 Kiểm tra thư mục gốc repo"
+          ls -la
+          echo "📁 Kiểm tra thư mục public/"
+          ls -la public/
+
       - name: Prepare deploy folders
         run: |
-          # Tạo thư mục deploy
           mkdir -p deploy/htdocs
           mkdir -p deploy/laravel-app
 
-          echo "📂 Kiểm tra thư mục public/"
-          ls -la public/
-
-          # Copy public vào htdocs (giữ .htaccess, index.php)
+          echo "📁 Copy public vào deploy/htdocs"
           rsync -av --delete public/ deploy/htdocs/
 
-          echo "📂 Kiểm tra deploy/htdocs sau khi copy"
+          echo "📁 Kiểm tra deploy/htdocs sau khi copy"
           ls -la deploy/htdocs/
 
-          # Sửa index.php để trỏ tới /laravel-app
+          echo "🔧 Sửa index.php để trỏ tới laravel-app"
           sed -i "s|require __DIR__.'/../vendor/autoload.php'|require __DIR__.'/../laravel-app/vendor/autoload.php'|g" deploy/htdocs/index.php
           sed -i "s|\$app = require_once __DIR__.'/../bootstrap/app.php'|\$app = require_once __DIR__.'/../laravel-app/bootstrap/app.php'|g" deploy/htdocs/index.php
 
-          echo "📄 Nội dung index.php sau khi sửa:"
+          echo "📄 Nội dung index.php sau khi sửa"
           head -n 20 deploy/htdocs/index.php
 
-          # Copy core Laravel (trừ public và các thư mục không cần)
+          echo "📁 Copy core Laravel vào deploy/laravel-app"
           rsync -av --delete \
             --exclude='public' \
             --exclude='node_modules' \
             --exclude='.git' \
             ./ deploy/laravel-app/
 
-          echo "📂 Kiểm tra deploy/laravel-app"
+          echo "📁 Kiểm tra deploy/laravel-app"
           ls -la deploy/laravel-app/
 
       - name: Inject .env from secrets
