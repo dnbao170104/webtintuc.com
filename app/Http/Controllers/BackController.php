@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 class BackController extends Controller
 {
@@ -41,4 +42,13 @@ class BackController extends Controller
             return redirect('admin/staff/profile')->with(['flash_level' => 'danger', 'flash_message' => 'Thêm tài khoản không thành công. Vui lòng thử lại!']);
         }
     }
+    public function staff(){
+    $User = DB::table('users as a')
+        ->join('users_level as b', 'a.level', '=', 'b.id')
+        // Thêm a.id và đổi tên b.name thành level_name cho dễ gọi
+        ->selectRaw('a.id, a.fullname, a.address, a.email, a.phone, b.name as level_name') 
+        ->get();
+    
+    return view('back.staff.list', compact('User'));
+}
 }

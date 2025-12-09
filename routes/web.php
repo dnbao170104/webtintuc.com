@@ -34,9 +34,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function() {
     Route::group(['prefix' => 'staff'], function() {
         Route::get('profile', [BackController::class, 'staff_profile'])->name('staff.profile');
         Route::post('profile', [BackController::class, 'staff_profile_post'])->name('staff.profile.post');
-        
-        Route::get('list', [BackController::class, 'staff'])->name('staff.list');
+        Route::get('list', [BackController::class, 'staff_list'])->name('admin.staff.list');
         Route::get('add', [BackController::class, 'staff_add'])->name('staff.add');
+        
         Route::post('add', [BackController::class, 'staff_add_post']);
         Route::get('edit/{id}', [BackController::class, 'staff_edit'])->name('staff.edit');
         Route::post('edit/{id}', [BackController::class, 'staff_edit_post']);

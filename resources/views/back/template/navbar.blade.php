@@ -23,7 +23,7 @@
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
         
           <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
+          <a href="{{ url('admin/staff/list') }}" class="dropdown-item">
             <i class="fa-solid fa-users"></i>  Quản lý nhân viên
           </a>
           <div class="dropdown-divider"></div>
