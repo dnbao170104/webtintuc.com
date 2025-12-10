@@ -36,10 +36,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function() {
         Route::post('profile', [BackController::class, 'staff_profile_post'])->name('staff.profile.post');
         Route::get('list', [BackController::class, 'staff_list'])->name('admin.staff.list');
         Route::get('add', [BackController::class, 'staff_add'])->name('staff.add');
-        
         Route::post('add', [BackController::class, 'staff_add_post']);
         Route::get('edit/{id}', [BackController::class, 'staff_edit'])->name('staff.edit');
-        Route::post('edit/{id}', [BackController::class, 'staff_edit_post']);
+        Route::post('edit/{id}', [BackController::class, 'staff_edit_post'])->name('staff.edit_post');
+
         Route::post('delete', [BackController::class, 'staff_delete'])->name('staff.delete');
         Route::post('filter', [BackController::class, 'staff_filter'])->name('staff.filter');
         Route::resource('posts', PostController::class);

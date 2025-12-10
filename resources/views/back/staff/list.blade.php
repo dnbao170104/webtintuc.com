@@ -1,7 +1,7 @@
 @extends('back.template.master')
 
-@section('title', 'Thông tin tài khoản nhân viên')
-@section('heading', 'Thông tin tài khoản nhân viên')
+@section('title', 'Quan lý nhân viên')
+@section('heading', 'Danh sách nhân viên')
 
 @section('content')
 
@@ -11,6 +11,7 @@
         <div class="card-header">
             <h3 class="card-title">Danh sách nhân viên</h3>
         </div>
+        <a href="{{ url('admin/staff/add') }} "><button type="button" class="btn btn-block btn-primary" width="10px" ><b>Thêm nhân viên mới</b></button></a>
         <!-- /.card-header -->
         <div class="card-body">
             <table class="table table-bordered">
@@ -48,7 +49,7 @@
 
             <td>
                 {{-- Nút Sửa/Xóa (cần ID để hoạt động sau này) --}}
-                <a href="#" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
+                <a href="{{ url('admin/staff/edit/' . $row->id) }}" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
                 <a href="#" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></a>
             </td>
         </tr>
