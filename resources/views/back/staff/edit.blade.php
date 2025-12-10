@@ -18,11 +18,27 @@
                             <select class="form-control" name="level" id="level">
                                 @if(isset($UserLevel)&&count($UserLevel)>0)
                                     @foreach($UserLevel as $level)
-                                        <option value="{{ $level->id }}">Cấp bậc: {{ $level->name }}</option>
+                                        <option value="{{ $level->id }}" @if($level->id==$User->id) selected=""@endif>
+                                            Cấp bậc: {{ $level->name }}
+                                        </option>
                                     @endforeach
                                 @endif
                             </select>
                         </div>
+                         {{-- <div class="form-group">
+                            <select class="form-control" name="level" id="level">
+                               
+                                   
+                                        <option value="1"  @if($User->status==1) selected=""@endif> 
+                                            Trạng thái: Bật
+                                        </option>
+                                        <option value=""  @if($User->status==1) selected=""@endif> 
+                                            Trạng thái: Tắt
+                                        </option>
+                                  
+                                
+                            </select>
+                        </div> --}}
                         <div class="form-group mb-3">
                             <label for="fullname">Họ và tên <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="fullname" name="fullname" value="{{ $User->fullname }}"

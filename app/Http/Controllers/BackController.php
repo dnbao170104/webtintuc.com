@@ -81,15 +81,21 @@ class BackController extends Controller
             return redirect('admin/staff/add')->with(['flash_level'=>'danger','flash_message'=>'Thêm tài khoản không thành công. Vui lòng thử lại!']);
         }
     }
-    function staff_delete($id){
-        $user = User::find($id);
-        $flag = $user->delete();
-        if($flag == true){
-            return redirect('admin/staff/list')->with(['flash_level'=>'success','flash_message'=>'Xóa tài khoản thành công.']);
-        }else{
-            return redirect('admin/staff/list')->with(['flash_level'=>'danger','flash_message'=>'Xóa tài khoản không thành công. Vui lòng thử lại!']);
-        }
+   public function staff_delete($id) 
+{
+    // Thực hiện xóa
+    $flag = DB::table('users')->where('id', $id)->delete();
+
+    if ($flag) {
+        // SỬA: Redirect về trang danh sách (admin.staff.list)
+        return redirect()->route('admin.staff.list')
+                         ->with(['flash_level'=>'success', 'flash_message'=>'Xóa tài khoản thành công.']);
+    } else {
+        // SỬA: Redirect về trang danh sách nếu lỗi
+        return redirect()->route('admin.staff.list')
+                         ->with(['flash_level'=>'danger', 'flash_message'=>'Xóa tài khoản không thành công. Vui lòng thử lại!']);
     }
+}
     function staff_edit(Request $request, $id){
         $User = User::find($id);
         $UserLevel = DB::table('users_level')->where('status', 1)->get();
@@ -118,4 +124,5 @@ class BackController extends Controller
             return redirect('admin/staff/edit/'.$id)->with(['flash_level'=>'danger','flash_message'=>'Cập nhật tài khoản không thành công. Vui lòng thử lại!']);
         }
     }
+    
 }

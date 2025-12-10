@@ -5,7 +5,7 @@
 
 @section('content')
 <div class="container-fluid p-4">
-    <h1 class="mb-4">Thông tin tài khoản</h1>
+    <h1 class="mb-4"><b>Tạo tài khoản mới</b></h1>
 
     <div class="row">
         <div class="col-md-12">

@@ -50,7 +50,11 @@
             <td>
                 {{-- Nút Sửa/Xóa (cần ID để hoạt động sau này) --}}
                 <a href="{{ url('admin/staff/edit/' . $row->id) }}" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
-                <a href="#" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></a>
+                <a href="{{ route('staff.delete', ['id' => $row->id]) }}" 
+                class="btn btn-danger btn-sm"
+                onclick="return confirm('Bạn có chắc chắn muốn xóa nhân viên này không?');">
+                <i class="fas fa-trash"></i>
+</a>
             </td>
         </tr>
         @endforeach
