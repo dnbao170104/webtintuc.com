@@ -45,4 +45,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function() {
         Route::resource('posts', PostController::class);
         Route::resource('users', UserController::class);
     });
+    // System
+    route::get('/system', [BackController::class, 'system'])->name('admin.system');
+    route::post('/system', [BackController::class, 'system_post'])->name('admin.system.post');
 });

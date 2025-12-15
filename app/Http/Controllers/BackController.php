@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\System;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use App\Models\UserLevel;
+use Illuminate\Support\Facades\Hash;
+use  Illuminate\Support\Facades\File;
 
 class BackController extends Controller
 {
@@ -15,6 +18,7 @@ class BackController extends Controller
     public function home(){
         return view("back.home.home");
     }
+    //Staff Profile--------------------------------------------------------------------------------------
     public function staff_profile(){
         return view("back.staff.profile");
     }
@@ -124,5 +128,58 @@ class BackController extends Controller
             return redirect('admin/staff/edit/'.$id)->with(['flash_level'=>'danger','flash_message'=>'Cập nhật tài khoản không thành công. Vui lòng thử lại!']);
         }
     }
+    //Staff Management--------------------------------------------------------------------------------------
+
     
+    //System management--------------------------------------------------------------------------------------
+    public function system(){
+        $logo= DB::table('system')->where('Status', 1)->where('Code', 'logo')->first();
+        $email= DB::table('system')->where('Status', 1)->where('Code', 'email')->first();
+        $phone= DB::table('system')->where('Status', 1)->where('Code', 'phone')->first();
+        $address= DB::table('system')->where('Status', 1)->where('Code', 'address')->first();
+        $copyright= DB::table('system')->where('Status', 1)->where('Code', 'copyright')->first();
+        $favicon= DB::table('system')->where('Status', 1)->where('Code', 'favicon')->first();
+        $name= DB::table('system')->where('Status', 1)->where('Code', 'name')->first();
+
+        return view("back.system.system",compact('logo','email','phone','address','copyright','favicon','name'));
+    }
+    public function system_post(Request $request){
+        
+        // Cập nhật các trường khác
+        DB::table('system')->where('Code', 'email')->update(['Description' => $request->email]);
+        DB::table('system')->where('Code', 'phone')->update(['Description' => $request->phone]);
+        DB::table('system')->where('Code', 'address')->update(['Description' => $request->address]);
+        DB::table('system')->where('Code', 'copyright')->update(['Description' => $request->copyright]);
+        DB::table('system')->where('Code', 'name')->update(['Description' => $request->name]);
+
+        // Xử lý logo
+        if (!empty($request->file('logo'))) {
+            $logo=System::where('Status', '1')->where('Code', 'logo')->first();
+            $path='images/logo/'.$logo->Description;
+            if(File::exists($path)){
+                File::delete($path);    
+            }
+            $name = time() . '_' .$request->file('logo')->getClientOriginalName();
+
+            $request->file('logo')->move('images/logo', $name);
+           $logo->Description = $name;
+            $logo->save();
+        }
+
+        // Xử lý favicon
+        if (!empty($request->file('favicon'))) {
+            $favicon=System::where('Status', '1')->where('Code', 'favicon')->first();
+            $path='images/favicon/'.$favicon->Description;
+            if(File::exists($path)){
+                File::delete($path);    
+            }
+            $name = time() . '_' .$request->file('favicon')->getClientOriginalName();
+
+            $request->file('favicon')->move('images/favicon', $name);
+           $favicon->Description = $name;
+            $favicon->save();}
+
+
+        return redirect('admin/system')->with(['flash_level'=>'success','flash_message'=>'Cập nhật cài đặt hệ thống thành công.']);
+    }
 }

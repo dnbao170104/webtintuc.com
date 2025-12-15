@@ -8,7 +8,7 @@
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu">
                 
                 <li class="nav-item">
-                    <a href="{{ route('admin.home') }}" class="nav-link">
+                    <a href="{{ url('admin/system') }}" class="nav-link">
                         <i class="fa-solid fa-gear"></i>
                         <p><b>Cấu hình hệ thống</b></p>
                     </a>
