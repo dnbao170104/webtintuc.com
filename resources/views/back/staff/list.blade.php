@@ -11,7 +11,11 @@
         <div class="card-header">
             <h3 class="card-title">Danh sách nhân viên</h3>
         </div>
-        <a href="{{ url('admin/staff/add') }} "><button type="button" class="btn btn-block btn-primary" width="10px" ><b>Thêm nhân viên mới</b></button></a>
+        
+        <div class="card-footer">
+            <a href="{{ url('admin/staff/add') }} "><button type="submit" class="btn btn-primary">Thêm mới </button></a>
+             
+        </div>
         <!-- /.card-header -->
         <div class="card-body">
             <table class="table table-bordered">

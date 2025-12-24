@@ -2,7 +2,7 @@
 
 @section('title', 'Cấu hình hệ thống')
 @section('heading', 'Cấu hình hệ thống')
-
+@section('system','active')
 @section('content')
 <div class="container-fluid p-4">
     <h1 class="mb-4"><b>Cấu hình hệ thống</b></h1>

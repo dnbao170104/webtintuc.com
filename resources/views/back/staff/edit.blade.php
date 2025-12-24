@@ -6,7 +6,7 @@
 @section('content')
 <div class="container-fluid p-4">
     <h1 class="mb-4" ><b>Chỉnh sửa thông tin tài khoản</b></h1>
-
+    
     <div class="row">
         <div class="col-md-12">
             <div class="card card-primary">
@@ -81,6 +81,7 @@
 
                     <div class="card-footer">
                         <button type="submit" class="btn btn-primary">Submit</button>
+                        <a href="{{ url('admin/staff/list') }} "><button type="button" class="btn btn-primary">Quay lại</button></a>
                     </div>
                 </form>
 

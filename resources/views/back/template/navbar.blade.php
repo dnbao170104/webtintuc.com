@@ -22,10 +22,12 @@
         </a>
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
         
+          @if(isset(Auth::user()->level) && Auth::user()->level == 1)
           <div class="dropdown-divider"></div>
           <a href="{{ url('admin/staff/list') }}" class="dropdown-item">
             <i class="fa-solid fa-users"></i>  Quản lý nhân viên
           </a>
+          @endif
           <div class="dropdown-divider"></div>
           <a href="{{ url('admin/staff/profile') }}" class="dropdown-item">
             <i class="fa-solid fa-user-pen"></i> Thông tin tài khoản

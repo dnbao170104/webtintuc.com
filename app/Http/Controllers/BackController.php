@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\DB;
 use App\Models\UserLevel;
 use Illuminate\Support\Facades\Hash;
 use  Illuminate\Support\Facades\File;
+use App\Models\Page;
+use App\Models\Social;
 
 class BackController extends Controller
 {
@@ -181,5 +183,56 @@ class BackController extends Controller
 
 
         return redirect('admin/system')->with(['flash_level'=>'success','flash_message'=>'Cập nhật cài đặt hệ thống thành công.']);
+    }
+    //Page Management--------------------------------------------------------------------------------------
+    public function page_list(){
+        $Pages = DB::table('page')->get();
+        return view("back.pages.list", compact('Pages'));
+        
+    }
+    public function page_edit(Request $request, $id){
+        $Pages = DB::table('page')->where('RowID', $id)->first();
+        return view("back.pages.edit", compact('Pages'));
+    }
+    public function page_edit_post(Request $request, $id){
+        // Kiểm tra validate dữ liệu đầu vào
+        if($request->Font == '' ){
+            return redirect('admin/pages/edit/'.$id)->with(['flash_level'=>'danger','flash_message'=>'Vui lòng điền đầy đủ các trường bắt buộc']);
+        }
+        $page = Page::find($id);
+        $page->Name = $request->Name;
+        $page->Font = $request->Font;
+        $page->Sort = $request->Sort;
+        $flag = $page->save();
+        if($flag == true){
+            return redirect('admin/pages/edit/'.$id)->with(['flash_level'=>'success','flash_message'=>'Cập nhật trang thành công.']);
+        }else{
+            return redirect('admin/pages/edit/'.$id)->with(['flash_level'=>'danger','flash_message'=>'Cập nhật trang không thành công. Vui lòng thử lại!']);
+        }
+    }
+    //social management--------------------------------------------------------------------------------------
+    public function social_list(){
+        $Socials = DB::table('social')->get();
+        return view("back.social.list", compact('Socials'));
+    }
+    public function social_edit(Request $request, $id){
+        $Social = DB::table('social')->where('RowID', $id)->first();
+        return view("back.social.edit", compact('Social'));
+    }
+    public function social_edit_post(Request $request, $id){
+        // Kiểm tra validate dữ liệu đầu vào
+        if($request->Font == '' ){
+            return redirect('admin/social/edit/'.$id)->with(['flash_level'=>'danger','flash_message'=>'Vui lòng điền đầy đủ các trường bắt buộc']);
+        }
+        $social = Social::find($id);    
+        $social->Name = $request->Name;
+        $social->Font = $request->Font;
+        $social->Sort = $request->Sort;
+        $flag = $social->save();
+        if($flag == true){
+            return redirect('admin/social/edit/'.$id)->with(['flash_level'=>'success','flash_message'=>'Cập nhật mạng xã hội thành công.']);
+        }else{
+            return redirect('admin/social/edit/'.$id)->with(['flash_level'=>'danger','flash_message'=>'Cập nhật mạng xã hội không thành công. Vui lòng thử lại!']);
+        }   
     }
 }

@@ -6,21 +6,21 @@
     <div class="sidebar">
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu">
-                
+@if(isset(Auth::user()->level) && Auth::user()->level == 1)
                 <li class="nav-item">
-                    <a href="{{ url('admin/system') }}" class="nav-link">
+                    <a href="{{ url('admin/system') }}" class="nav-link @yield('system')">
                         <i class="fa-solid fa-gear"></i>
                         <p><b>Cấu hình hệ thống</b></p>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a href="{{ route('users.index') }}" class="nav-link">
+                    <a href="{{ url('admin/pages/list') }}" class="nav-link  @yield('page')">
                         <i class="nav-icon fas fa-users"></i>
                         <p>Quản lý trang</p>
                     </a>
                 </li>
-
+@endif
                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-newspaper"></i>
@@ -44,13 +44,14 @@
                         </li>
                     </ul>
                 </li>
-                
+                @if(isset(Auth::user()->level) && Auth::user()->level == 1)
                 <li class="nav-item">
-                    <a href="{{ route('users.index') }}" class="nav-link">
+                    <a href="{{ route('admin.social.list') }}" class="nav-link  @yield('social')">
                         <i class="nav-icon fas fa-users"></i>
                         <p>Quản lý mạng xã hội</p>
                     </a>
                 </li>
+                @endif
                 <li class="nav-item">
                     <a href="{{ route('users.index') }}" class="nav-link">
                         <i class="nav-icon fas fa-users"></i>

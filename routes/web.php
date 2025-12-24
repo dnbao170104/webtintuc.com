@@ -48,4 +48,16 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function() {
     // System
     route::get('/system', [BackController::class, 'system'])->name('admin.system');
     route::post('/system', [BackController::class, 'system_post'])->name('admin.system.post');
+    //page management
+    Route::group(['prefix' => 'pages'], function() {
+        Route::get('list', [BackController::class, 'page_list'])->name('admin.page.about');
+        Route::get('edit/{id}', [BackController::class, 'page_edit'])->name('admin.page.about.edit');
+        Route::post('edit/{id}', [BackController::class, 'page_edit_post'])->name('admin.page.about.edit.post');
+    });
+    //social management----------------------------------------------------------------------------------
+    Route::group(['prefix' => 'social'], function() {
+        Route::get('list', [BackController::class, 'social_list'])->name('admin.social.list');
+        Route::get('edit/{id}', [BackController::class, 'social_edit'])->name('admin.social.edit');
+        Route::post('edit/{id}', [BackController::class, 'social_edit_post'])->name('admin.social.edit.post');
+    });
 });
