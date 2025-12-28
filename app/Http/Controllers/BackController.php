@@ -202,13 +202,17 @@ class BackController extends Controller
     }
     public function page_edit_post(Request $request, $id){
         // Kiểm tra validate dữ liệu đầu vào
-        if($request->Font == '' ){
+        if($request->Name == '' ){
             return redirect('admin/pages/edit/'.$id)->with(['flash_level'=>'danger','flash_message'=>'Vui lòng điền đầy đủ các trường bắt buộc']);
         }
         $page = Page::find($id);
         $page->Name = $request->Name;
         $page->Font = $request->Font;
         $page->Sort = $request->Sort;
+        $page->MetaTitle = $request->MetaTitle;
+        $page->MetaKeyword = $request->MetaKeyword;
+        $page->MetaDescription = $request->MetaDescription;
+        $page->Description = $request->Description;
         $flag = $page->save();
         if($flag == true){
             return redirect('admin/pages/edit/'.$id)->with(['flash_level'=>'success','flash_message'=>'Cập nhật trang thành công.']);
@@ -366,6 +370,7 @@ class BackController extends Controller
         $news->Name = $request->Name;
         $news->RowIDCat = $request->RowIDCat;
         $news->Status = $request->Status;
+        $news->Alias = $request->Alias;
         $news->MetaTitle = $request->MetaTitle;
         $news->MetaKeyword = $request->MetaKeyword; 
         $news->MetaDescription = $request->MetaDescription;
@@ -435,6 +440,7 @@ class BackController extends Controller
         $news->MetaDescription = $request->MetaDescription;
         $news->SmallDescription = $request->SmallDescription;
         $news->Description = $request->Description;
+        $news->Alias = $request->Alias;
         $news->Status = $request->Status;
         if($request->hasFile('images')){
         $file = $request->file('images');

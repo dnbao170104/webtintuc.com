@@ -25,10 +25,13 @@
                         </div>
                         <div class="form-group mb-3">
                             <label for="fullname">Tên trang <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="Name" name="Name" value="{{ $Pages->Name }}"
-                                   placeholder="Tên trang">
+                            <input type="text" class="form-control" id="title" name="Name" value="{{ $Pages->Name }}"
+                                   placeholder="Tên trang" onkeyup="ChangeToSlug();">
                         </div>
-
+                         <div class="form-group mb-3">
+                            <label for="fullname">Đường dẫn<span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" name="Alias" id="slug" rows="4" value="{{ $Pages->Alias }}" disabled></input>
+                        </div>
                         <div class="form-group mb-3">
                             <label for="phone">Font <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="Font" name="Font"
@@ -39,6 +42,23 @@
                             <label for="address">Sắp xếp</label>
                             <input type="text" class="form-control" id="Sort" name="Sort"
                                   value="{{ $Pages->Sort }}" placeholder="Sắp xếp">
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="fullname">Thẻ meta title <span class="text-danger">*</span></label>
+                            <textarea class="form-control" id="MetaTitle" name="MetaTitle" rows="4" placeholder="Thẻ meta title">{{ $Pages->MetaTitle }}</textarea>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="fullname">Thẻ MetaDescription <span class="text-danger">*</span></label>
+                             <textarea class="form-control" id="MetaDescription" name="MetaDescription" rows="4" placeholder="Thẻ meta description" >{{ $Pages->MetaDescription }}</textarea>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="fullname">Thẻ MetaKeywords <span class="text-danger">*</span></label>
+                            <textarea class="form-control" id="MetaKeywords" name="MetaKeyword" rows="4" placeholder="Thẻ meta keyword" >{{ $Pages->MetaKeyword }}</textarea>
+                            </div>
+                              <div>
+                                <label for="fullname">Mô tả tin tức <span class="text-danger">*</span></label>
+                                <textarea class="form-control" id="ckeditor" name="Description" rows="4" placeholder="Mô tả tin tức" >{{ $Pages->Descripstion }}</textarea>
                         </div>
                     </div>
 

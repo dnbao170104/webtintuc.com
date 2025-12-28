@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BackController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\FrontController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,9 +17,20 @@ use App\Http\Controllers\PostController;
 |
 */
 
-Route::get('/', function () {
+Route::get('/login', function () {
     return view('welcome');
 });
+// Frontend routes
+Route::get('/', [FrontController::class, 'home'])->name('home');
+Route::get('/lien-he', [FrontController::class, 'slug']);
+
+
+
+
+
+
+
+
 
 // Login routes
 Route::get('/login', [UserController::class, 'getLogin'])->name('login');

@@ -36,12 +36,12 @@
                         
                         <div class="form-group mb-3">
                             <label for="fullname">Tên tên tin tức <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="Name" name="Name" value="" placeholder="Tên tin tức">
+                            <input type="text" class="form-control" id="title" name="Name" value="" placeholder="Tên tin tức" onkeyup="ChangeToSlug();">
                         </div>
 
                         <div class="form-group mb-3">
-                            <label for="fullname">Thẻ meta title <span class="text-danger">*</span></label>
-                            <textarea class="form-control" id="MetaTitle" name="MetaTitle" rows="4" placeholder="Thẻ meta title"></textarea>
+                            <label for="fullname">Đường dẫn<span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" name="Alias" id="slug" rows="4" disabled ></input>
                         </div>
 
                         <div class="form-group mb-3">
@@ -51,6 +51,7 @@
                         <div class="form-group mb-3">
                             <label for="fullname">Thẻ MetaKeywords <span class="text-danger">*</span></label>
                             <textarea class="form-control" id="MetaKeywords" name="MetaKeywords" rows="4" placeholder="Thẻ meta keywords"></textarea>
+                            </div>
                          <div class="form-group mb-3">
                             <label for="fullname">Giới thiệu ngắn <span class="text-danger">*</span></label>
                             <textarea class="form-control" id="SmallDescription" name="SmallDescription" rows="4" placeholder="Giới thiệu ngắn"></textarea>
