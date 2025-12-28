@@ -20,9 +20,9 @@
                         <p>Quản lý trang</p>
                     </a>
                 </li>
-@endif
+
                 <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
+                    <a href="#" class="nav-link @yield('news_cat') @yield('news')">
                         <i class="nav-icon fas fa-newspaper"></i>
                         <p>
                             Quản lý tin tức
@@ -31,35 +31,36 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="#" class="nav-link"> 
+                            <a href="{{ url('admin/news_cat/list') }}" class="nav-link @yield('news_cat')"> 
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Danh mục tin tức</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('posts.index') }}" class="nav-link">
+                            <a href="{{ url('admin/news/list') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Danh sách tin tức</p>
                             </a>
                         </li>
                     </ul>
                 </li>
+                @endif
                 @if(isset(Auth::user()->level) && Auth::user()->level == 1)
                 <li class="nav-item">
-                    <a href="{{ route('admin.social.list') }}" class="nav-link  @yield('social')">
+                    <a href="{{ url('admin/social/list') }}" class="nav-link  @yield('social')">
                         <i class="nav-icon fas fa-users"></i>
                         <p>Quản lý mạng xã hội</p>
                     </a>
                 </li>
                 @endif
                 <li class="nav-item">
-                    <a href="{{ route('users.index') }}" class="nav-link">
+                    <a href="{{ url('admin/newsletter/list') }}" class="nav-link  @yield('newsletter')">
                         <i class="nav-icon fas fa-users"></i>
                         <p>Quản lý khuyến mãi</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('users.index') }}" class="nav-link">
+                    <a href="{{ url('admin/contact/list') }}" class="nav-link  @yield('contact')">
                         <i class="nav-icon fas fa-users"></i>
                         <p>Quản lý liên hệ</p>
                     </a>

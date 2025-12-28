@@ -60,4 +60,36 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function() {
         Route::get('edit/{id}', [BackController::class, 'social_edit'])->name('admin.social.edit');
         Route::post('edit/{id}', [BackController::class, 'social_edit_post'])->name('admin.social.edit.post');
     });
+    //newsletter management----------------------------------------------------------------------------------
+    Route::group(['prefix' => 'newsletter'], function() {
+        Route::get('list', [BackController::class, 'newsletter_list'])->name('admin.newsletter.list');
+        Route::get('edit/{id}', [BackController::class, 'newsletter_edit'])->name('admin.newsletter.edit');
+        Route::post('edit/{id}', [BackController::class, 'newsletter_edit_post'])->name('admin.newsletter.edit.post');
+        Route::get('delete/{id}', [BackController::class, 'newsletter_delete'])->name('admin.newsletter.delete');
+    });
+    //contact management----------------------------------------------------------------------------------
+    Route::group(['prefix' => 'contact'], function() {
+        Route::get('list', [BackController::class, 'contact_list'])->name('admin.contact.list');
+        Route::get('edit/{id}', [BackController::class, 'contact_edit'])->name('admin.contact.edit');
+        Route::post('edit/{id}', [BackController::class, 'contact_edit_post'])->name('admin.contact.edit.post');
+        Route::get('delete/{id}', [BackController::class, 'contact_delete'])->name('admin.contact.delete');
+    });
+    //new category management----------------------------------------------------------------------------------
+    Route::group(['prefix' => 'news_cat'], function() {
+        Route::get('list', [BackController::class, 'news_cat_list'])->name('admin.newcategory.list');
+        Route::get('cat_edit/{id}', [BackController::class, 'news_cat_edit'])->name('admin.newcategory.edit');
+        Route::post('cat_edit/{id}', [BackController::class, 'news_cat_edit_post'])->name('admin.newcategory.edit.post');
+        Route::get('delete/{id}', [BackController::class, 'news_cat_delete'])->name('admin.newcategory.delete');
+
+    });
+    Route::group(['prefix' => 'news'], function() {
+        Route::get('list', [BackController::class, 'news_list'])->name('admin.news.list');
+        Route::get('add', [BackController::class, 'news_getAdd'])->name('admin.news.add');  
+        Route::post('add', [BackController::class, 'news_postAdd']);
+        Route::get('edit/{id}', [BackController::class, 'news_getEdit'])->name('admin.news.edit');  
+        Route::post('edit/{id}', [BackController::class, 'news_postEdit'])->name('admin.news.edit.post');
+        Route::get('delete/{id}', [BackController::class, 'news_delete'])->name('admin.news.delete');
+
+    });
+
 });

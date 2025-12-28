@@ -11,6 +11,10 @@ use Illuminate\Support\Facades\Hash;
 use  Illuminate\Support\Facades\File;
 use App\Models\Page;
 use App\Models\Social;
+use App\Models\Newsletter;
+use App\Models\Contact;
+use App\Models\NewsCategory;
+use App\Models\News;
 
 class BackController extends Controller
 {
@@ -234,5 +238,180 @@ class BackController extends Controller
         }else{
             return redirect('admin/social/edit/'.$id)->with(['flash_level'=>'danger','flash_message'=>'Cập nhật mạng xã hội không thành công. Vui lòng thử lại!']);
         }   
+    }
+    public function newsletter_list(){
+        $Newsletter = DB::table('newsletter')->get();
+        return view("back.newsletter.list", compact('Newsletter'));
+    }
+    public function newsletter_edit(Request $request, $id){
+        $Newsletter = DB::table('newsletter')->where('RowID', $id)->first();
+        return view("back.newsletter.edit", compact('Newsletter'));
+    }
+    public function newsletter_edit_post(Request $request, $id){
+        // Kiểm tra validate dữ liệu đầu vào
+        if($request->Email == '' ){
+            return redirect('admin/newsletter/edit/'.$id)->with(['flash_level'=>'danger','flash_message'=>'Vui lòng điền đầy đủ các trường bắt buộc']);
+        }
+        $newsletter = Newsletter::find($id);    
+        $newsletter->Email = $request->Email;
+        $newsletter->IsViews = $request->Status;
+        $flag = $newsletter->save();
+        if($flag == true){
+            return redirect('admin/newsletter/edit/'.$id)->with(['flash_level'=>'success','flash_message'=>'Cập nhật khuyến mãi thành công.']);
+        }else{
+            return redirect('admin/newsletter/edit/'.$id)->with(['flash_level'=>'danger','flash_message'=>'Cập nhật khuyến mãi không thành công. Vui lòng thử lại!']);
+        }  
+    }
+    public function newsletter_delete($id) 
+{
+    $Newsletter = Newsletter::find($id);
+    $flag = $Newsletter->delete();
+    // Thực hiện xóa
+    if($flag == true){
+            return redirect('admin/newsletter/list')->with(['flash_level'=>'success','flash_message'=>'Xóa email thành công.']);
+        }else{
+            return redirect('admin/newsletter/list')->with(['flash_level'=>'danger','flash_message'=>'Xóa email không thành công. Vui lòng thử lại!']);
+        }  
+    }
+    //contact management--------------------------------------------------------------------------------------
+    public function contact_list(){
+        $Contact = DB::table('contact')->get();
+        return view("back.contact.list", compact('Contact'));   
+    }
+    public function contact_edit(Request $request, $id){
+        $Contact = DB::table('contact')->where('RowID', $id)->first();
+        return view("back.contact.edit", compact('Contact'));
+    }
+    public function contact_edit_post(Request $request, $id){
+        // Kiểm tra validate dữ liệu đầu vào
+        if($request->Name == '' || $request->Email == '' || $request->Phone == '' ){
+            return redirect('admin/contact/edit/'.$id)->with(['flash_level'=>'danger','flash_message'=>'Vui lòng điền đầy đủ các trường bắt buộc']);
+        }
+        $contact = Contact::find($id);    
+        $contact->Name = $request->Name;
+        $contact->Email = $request->Email;
+        $contact->Phone = $request->Phone;
+        $contact->IsViews = $request->IsViews;
+        $flag = $contact->save();
+        if($flag == true){
+            return redirect('admin/contact/edit/'.$id)->with(['flash_level'=>'success','flash_message'=>'Cập nhật liên hệ thành công.']);
+        }else{
+            return redirect('admin/contact/edit/'.$id)->with(['flash_level'=>'danger','flash_message'=>'Cập nhật liên hệ không thành công. Vui lòng thử lại!']);
+        }   }
+    public function contact_delete($id)
+{
+    $Contact = Contact::find($id);
+    $flag = $Contact->delete();
+    // Thực hiện xóa
+    if($flag == true){
+            return redirect('admin/contact/list')->with(['flash_level'=>'success','flash_message'=>'Xóa liên hệ thành công.']);
+        }else{
+            return redirect('admin/contact/list')->with(['flash_level'=>'danger','flash_message'=>'Xóa liên hệ không thành công. Vui lòng thử lại!']);      
+        }
+    }
+    public function news_cat_list(){
+        $NewsCategory = DB::table('news_cat')->where('Status', 1)->get();
+        return view("back.news.cat_list", compact('NewsCategory'));
+    }
+    public function news_cat_edit(Request $request, $id){
+        $NewsCategory = DB::table('news_cat')->where('RowID', $id)->first();
+        return view("back.news.cat_edit", compact('NewsCategory'));
+    }
+    public function news_cat_edit_post(Request $request, $id){
+        // Kiểm tra validate dữ liệu đầu vào
+        if($request->Name == '' ){
+            return redirect('admin/news_cat/edit/'.$id)->with(['flash_level'=>'danger','flash_message'=>'Vui lòng điền đầy đủ các trường bắt buộc']);
+        }   
+        $news_cat = NewsCategory::find($id);    
+        $news_cat->Name = $request->Name;
+        $news_cat->Status = $request->Status;
+        $flag = $news_cat->save();
+        if($flag == true){
+            return redirect('admin/news_cat/cat_edit/'.$id)->with(['flash_level'=>'success','flash_message'=>'Cập nhật danh mục tin tức thành công.']);
+        }else{
+            return redirect('admin/news_cat/cat_edit/'.$id)->with(['flash_level'=>'danger','flash_message'=>'Cập nhật danh mục tin tức không thành công. Vui lòng thử lại!']);      
+        }
+    }
+    public function news_cat_delete($id)
+{
+    $NewsCategory = NewsCategory::find($id);
+    $flag = $NewsCategory->delete();
+    // Thực hiện xóa
+    if($flag == true){
+            return redirect('admin/news_cat/list')->with(['flash_level'=>'success','flash_message'=>'Xóa danh mục tin tức thành công.']);
+        }else{
+            return redirect('admin/news_cat/list')->with(['flash_level'=>'danger','flash_message'=>'Xóa danh mục tin tức không thành công. Vui lòng thử lại!']);
+        }
+    }
+    //news management--------------------------------------------------------------------------------------
+   public function news_list(){
+        $News = DB::table('news as a')->join('news_cat as b', 'a.RowIDCat', '=', 'b.RowID')
+        ->selectRaw('a.*, b.Name as CatName')
+        ->where('a.Status', 1)
+        ->orderBy('a.RowID', 'desc')->get();
+        return view("back.news.list", compact('News'));
+    }
+    public function news_getAdd(){
+        $NewsCategory = DB::table('news_cat')->get();
+        return view("back.news.add", compact('NewsCategory'));
+    }
+    public function news_postAdd(Request $request){
+        // Kiểm tra validate dữ liệu đầu vào
+        if($request->Name == '' || $request->Description == '' ){
+            return redirect('admin/news/add')->with(['flash_level'=>'danger','flash_message'=>'Vui lòng điền đầy đủ các trường bắt buộc']);
+        }   
+        $news = new News();    
+        $news->Name = $request->Name;
+        $news->RowIDCat = $request->RowIDCat;
+        $news->Status = $request->Status;
+        $news->MetaTitle = $request->MetaTitle;
+        $news->MetaKeyword = $request->MetaKeyword; 
+        $news->MetaDescription = $request->MetaDescription;
+        $news->SmallDescription = $request->SmallDescription;
+        $news->Description = $request->Description;
+
+        $flag = $news->save();
+        if($flag == true){
+            return redirect('admin/news/add')->with(['flash_level'=>'success','flash_message'=>'Thêm tin tức thành công.']);
+        }else{
+            return redirect('admin/news/add')->with(['flash_level'=>'danger','flash_message'=>'Thêm tin tức không thành công. Vui lòng thử lại!']);      
+        }   
+    }
+    public function news_getEdit(Request $request, $id){
+        $News = DB::table('news')->where('RowID', $id)->first();
+        $NewsCategory = DB::table('news_cat')->get();
+        return view("back.news.edit", compact('News', 'NewsCategory'));
+    }
+    public function news_postEdit(Request $request, $id){
+        // Kiểm tra validate dữ liệu đầu vào
+        if($request->Name == '' || $request->RowIDCat == '' || $request->MetaTitle == '' || $request->MetaKeyword == ''){
+            return redirect('admin/news/edit/'.$id)->with(['flash_level'=>'danger','flash_message'=>'Vui lòng điền đầy đủ các trường bắt buộc']);
+        }   
+        $news = News::find($id);    
+        $news->Name = $request->Name;
+        // $news->RowIDCat = $request->RowIDCat;
+        $news->MetaTitle = $request->MetaTitle;
+        $news->MetaKeyword = $request->MetaKeyword;
+        $news->MetaDescription = $request->MetaDescription;
+        $news->SmallDescription = $request->SmallDescription;
+        $news->Description = $request->Description;
+        $news->Status = $request->Status;
+        $flag = $news->save();
+        if($flag == true){
+            return redirect('admin/news/edit/'.$id)->with(['flash_level'=>'success','flash_message'=>'Cập nhật tin tức thành công.']);
+        }else{
+            return redirect('admin/news/edit/'.$id)->with(['flash_level'=>'danger','flash_message'=>'Cập nhật tin tức không thành công. Vui lòng thử lại!']);      
+        }   
+    }
+    public function news_delete($id)
+{
+    $News = News::find($id);
+    $flag = $News->delete();
+    // Thực hiện xóa    
+    if($flag == true){
+            return redirect('admin/news/list')->with(['flash_level'=>'success','flash_message'=>'Xóa tin tức thành công.']);
+        }else{
+            return redirect('admin/news/list')->with(['flash_level'=>'danger','flash_message'=>'Xóa tin tức không thành công. Vui lòng thử lại!']);
+        }
     }
 }
