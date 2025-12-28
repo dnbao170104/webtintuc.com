@@ -15,6 +15,8 @@ use App\Models\Newsletter;
 use App\Models\Contact;
 use App\Models\NewsCategory;
 use App\Models\News;
+use Intervention\Image\Facades\Image;
+
 
 class BackController extends Controller
 {
@@ -369,6 +371,44 @@ class BackController extends Controller
         $news->MetaDescription = $request->MetaDescription;
         $news->SmallDescription = $request->SmallDescription;
         $news->Description = $request->Description;
+        if($request->hasFile('images')){
+    $file = $request->file('images');
+    $random_digit = rand(000000000, 999999999);
+    $name = $random_digit.'-'.$file->getClientOriginalName();
+    $duoi = strtolower($file->getClientOriginalExtension());
+
+    
+    if($duoi != 'png' && $duoi != 'jpg' && $duoi != 'jpeg' && $duoi != 'svg'){
+        return back()->with(['flash_level' => 'danger', 'flash_message' => 'Định dạng ảnh không hợp lệ (chỉ hỗ trợ png, jpg, jpeg, svg)']);
+    }
+
+    
+    $file->move('images/news', $name);
+
+    
+    $img = Image::make('images/news/'.$name);
+
+   
+    $filePath = "images/news/".date('Ymd');
+    if (!file_exists($filePath)) {
+        mkdir("images/news/".date('Ymd'), 0777, true);
+    }
+
+    
+    $img->fit(208, 141);
+    
+    // Lưu ảnh vào folder ngày
+    $img->save('images/news/'.date('Ymd').'/'.$name);
+
+    // Xóa ảnh gốc vừa upload (ảnh tạm ở dòng move trên) để tránh rác
+    if (file_exists('images/news/'.$name)) {
+        unlink('images/news/'.$name);
+    }
+
+    // Lưu đường dẫn vào CSDL (Biến $news phải được định nghĩa trước đó)
+    $news->Images = date('Ymd').'/'.$name; 
+   
+}
 
         $flag = $news->save();
         if($flag == true){
@@ -396,6 +436,36 @@ class BackController extends Controller
         $news->SmallDescription = $request->SmallDescription;
         $news->Description = $request->Description;
         $news->Status = $request->Status;
+        if($request->hasFile('images')){
+        $file = $request->file('images');
+        $id_random_digit = rand(000000000, 999999999);
+        $name = $id_random_digit.'-'.$file->getClientOriginalName();
+        $duoi = strtolower($file->getClientOriginalExtension());
+
+      
+        if($duoi != 'png' && $duoi != 'jpg' && $duoi != 'jpeg' && $duoi != 'svg'){
+            return back()->with(['flash_level' => 'danger', 'flash_message' => 'Phần mở rộng ảnh không được hỗ trợ.']);
+        }
+
+        // Kiểm tra và xóa ảnh cũ nếu có
+        if($news->Images != ''){
+            if(file_exists('images/news/'.$news->Images)) {
+                unlink('images/news/'.$news->Images);
+            }
+        }
+        $file->move('images/news', $name);
+        $img = Image::make('images/news/'.$name);
+        $filePath = "images/news/".date('Ymd');
+        if (!file_exists($filePath)) {
+            mkdir("images/news/".date('Ymd'), 0777, true);
+        }
+        $img->fit(208, 141);
+        $img->save('images/news/'.date('Ymd').'/'.$name);
+        if (file_exists('images/news/'.$name)) {
+            unlink('images/news/'.$name);
+        }
+        $news->Images = date('Ymd').'/'.$name;
+    }
         $flag = $news->save();
         if($flag == true){
             return redirect('admin/news/edit/'.$id)->with(['flash_level'=>'success','flash_message'=>'Cập nhật tin tức thành công.']);

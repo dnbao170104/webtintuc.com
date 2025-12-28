@@ -22,13 +22,14 @@
         <th style="width: 10px">STT</th>
         <th>Tên tin tức</th>
         <th>Thuộc danh mục</th>
+        <th>Ảnh đại diện</th>
         <th><i class="fas fa-wrench"></i></th>
     </tr>
 </thead>
 
 <tbody>
 
-    @if (isset($News) && count($News    ) > 0)
+    @if (isset($News) && count($News) > 0)
         
         
         @foreach($News as $key => $row)
@@ -36,6 +37,10 @@
            <td>{{ $key + 1 }}</td>
             <td>{{ $row ->Name}}</td>
             <td>{{ $row ->CatName}}</td>
+            <td>
+                @if($row->Images!=null)
+                <img src="{{ asset('images/news/' . $row->Images) }}" alt="Ảnh tin tức" width="100" />
+                @endif
             
             <td>@if ($row->Status==1)
                 <span class="badge badge-success">Kích hoạt</span>

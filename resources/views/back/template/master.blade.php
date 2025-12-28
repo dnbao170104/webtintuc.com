@@ -45,5 +45,10 @@
 
 <!-- AdminLTE -->
 <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
+<!-- CKEditor -->
+<script src="https://cdn.ckeditor.com/4.21.0/standard/ckeditor.js"></script>
+<script>
+    CKEDITOR.replace('ckeditor');
+</script>
 </body>
 </html><!-- resources/views/back/template/master.blade.php -->

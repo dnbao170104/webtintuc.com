@@ -13,7 +13,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card card-primary">
-              <form action="{{ url('admin/news/edit/' . $News->RowID) }}" method="POST">
+              <form action="{{ url('admin/news/edit/' . $News->RowID) }}" method="POST" enctype="multipart/form-data">
                     <input type="hidden" name="id" >
                     <div class="card-body">
                         @csrf
@@ -51,16 +51,19 @@
                         <div class="form-group mb-3">
                             <label for="fullname">Thẻ MetaKeywords <span class="text-danger">*</span></label>
                             <textarea class="form-control" id="MetaKeywords" name="MetaKeyword" rows="4" placeholder="Thẻ meta keyword" >{{ $News->MetaKeyword }}</textarea>
-                         {{-- <div class="form-group mb-3">
-                            <label for="fullname">Giới thiệu ngắn <span class="text-danger">*</span></label>
-                            <textarea class="form-control" id="SmallDescription" name="SmallDescription" rows="4" placeholder="Giới thiệu ngắn" value="{{ $News->SmallDescription }}"></textarea>
-                        </div> --}}
+                         <div class="form-group mb-3">
+                            <label for="fullname">Ảnh đại diện<span class="text-danger">*</span></label><br>
+                            @if($News->Images!=null)
+                            <img src="{{ asset('images/news/' . $News->Images) }}" alt="Ảnh tin tức" width="150" />
+                            @endif
+                            <input type="file" name="images" class="form-control" />
+                        </div>
                          <div class="form-group mb-3">
                             <label for="fullname">Giới thiệu ngắn <span class="text-danger">*</span></label>
                             <textarea class="form-control" id="SmallDescription" name="SmallDescription" rows="4" placeholder="Giới thiệu ngắn" >{{ $News->SmallDescription }}</textarea>
                         </div>
                                 <label for="fullname">Mô tả tin tức <span class="text-danger">*</span></label>
-                                <textarea class="form-control" id="Description" name="Description" rows="4" placeholder="Mô tả tin tức" >{{ $News->Description }}</textarea>
+                                <textarea class="form-control" id="ckeditor" name="Description" rows="4" placeholder="Mô tả tin tức" >{{ $News->Description }}</textarea>
                         </div>
                        
                                 
