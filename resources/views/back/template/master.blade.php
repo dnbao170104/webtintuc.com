@@ -93,7 +93,6 @@ function ChangeToSlug()
     //In slug ra textbox có id “slug”
     document.getElementById('slug').value = slug;
 };
-
-</>
+</script>
 </body>
 </html><!-- resources/views/back/template/master.blade.php -->

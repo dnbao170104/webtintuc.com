@@ -15,7 +15,10 @@ use App\Models\Newsletter;
 use App\Models\Contact;
 use App\Models\NewsCategory;
 use App\Models\News;
+use App\Models\Slider;
 use Intervention\Image\Facades\Image;
+use Illuminate\Support\Str;
+
 
 
 class BackController extends Controller
@@ -370,7 +373,12 @@ class BackController extends Controller
         $news->Name = $request->Name;
         $news->RowIDCat = $request->RowIDCat;
         $news->Status = $request->Status;
-        $news->Alias = $request->Alias;
+        if ($request->has('Alias') && !empty($request->Alias)) {
+    $news->Alias = $request->Alias;
+} else {
+    // Nếu Alias rỗng, tự động tạo từ Name
+    $news->Alias = Str::slug($request->Name);
+}
         $news->MetaTitle = $request->MetaTitle;
         $news->MetaKeyword = $request->MetaKeyword; 
         $news->MetaDescription = $request->MetaDescription;
@@ -429,7 +437,7 @@ class BackController extends Controller
     }
     public function news_postEdit(Request $request, $id){
         // Kiểm tra validate dữ liệu đầu vào
-        if($request->Name == '' || $request->RowIDCat == '' || $request->MetaTitle == '' || $request->MetaKeyword == ''){
+        if($request->Name == '' || $request->Description == '' ){
             return redirect('admin/news/edit/'.$id)->with(['flash_level'=>'danger','flash_message'=>'Vui lòng điền đầy đủ các trường bắt buộc']);
         }   
         $news = News::find($id);    
@@ -440,7 +448,12 @@ class BackController extends Controller
         $news->MetaDescription = $request->MetaDescription;
         $news->SmallDescription = $request->SmallDescription;
         $news->Description = $request->Description;
-        $news->Alias = $request->Alias;
+       if ($request->has('Alias') && !empty($request->Alias)) {
+    $news->Alias = $request->Alias;
+} else {
+    // Nếu Alias rỗng, tự động tạo từ Name
+    $news->Alias = Str::slug($request->Name);
+}
         $news->Status = $request->Status;
         if($request->hasFile('images')){
         $file = $request->file('images');
@@ -490,4 +503,133 @@ class BackController extends Controller
             return redirect('admin/news/list')->with(['flash_level'=>'danger','flash_message'=>'Xóa tin tức không thành công. Vui lòng thử lại!']);
         }
     }
+    //slider management--------------------------------------------------------------------------------------
+    public function slider_list(){
+        $Slider = DB::table('slider')->where('Status', 1)->orderBy('Sort', 'DESC')->get();
+        return view("back.slider.list", compact('Slider'));
+    }
+    public function slider_getAdd(){
+        return view("back.slider.add");
+    }
+    public function slider_postAdd(Request $request){
+        // Kiểm tra validate dữ liệu đầu vào
+        if($request->Name == '' ){
+            return redirect('admin/slider/add')->with(['flash_level'=>'danger','flash_message'=>'Vui lòng điền đầy đủ các trường bắt buộc']);
+        }   
+        $slider = new Slider();   
+        $slider->Name = $request->Name;
+        $slider->Status = $request->Status;
+        if($request->hasFile('images')){
+    $file = $request->file('images');
+    $random_digit = rand(000000000, 999999999);
+    $name = $random_digit.'-'.$file->getClientOriginalName();
+    $duoi = strtolower($file->getClientOriginalExtension());
+
+    
+    if($duoi != 'png' && $duoi != 'jpg' && $duoi != 'jpeg' && $duoi != 'svg'){
+        return back()->with(['flash_level' => 'danger', 'flash_message' => 'Định dạng ảnh không hợp lệ (chỉ hỗ trợ png, jpg, jpeg, svg)']);
+    }
+
+    
+    $file->move('images/news_slider', $name);
+
+    $img = Image::make('images/news_slider/'.$name);
+
+   
+    $filePath = "images/news_slider/".date('Ymd');
+    if (!file_exists($filePath)) {
+        mkdir("images/news_slider/".date('Ymd'), 0777, true);
+    }
+
+    
+    $img->fit(1920, 600);
+    
+    // Lưu ảnh vào folder ngày
+    $img->save('images/news_slider/'.date('Ymd').'/'.$name);
+
+    // Xóa ảnh gốc vừa upload (ảnh tạm ở dòng move trên) để tránh rác
+    if (file_exists('images/news_slider/'.$name)) {
+        unlink('images/news_slider/'.$name);
+    }
+
+    // Lưu đường dẫn vào CSDL (Biến $news phải được định nghĩa trước đó)
+    $slider->Images = date('Ymd').'/'.$name; 
+   
 }
+        $flag = $slider->save();
+        if($flag == true){
+            return redirect('admin/slider/list')->with(['flash_level'=>'success','flash_message'=>'Thêm slider thành công.']);
+        }else{
+            return redirect('admin/slider/add')->with(['flash_level'=>'danger','flash_message'=>'Thêm slider không thành công. Vui lòng thử lại!']);      
+        } 
+    }
+    public function slider_getEdit(Request $request, $id){
+        $Slider = DB::table('slider')->where('RowID', $id)->first();
+        return view("back.slider.edit", compact('Slider'));
+    }
+    public function slider_postEdit(Request $request, $id){
+        // Kiểm tra validate dữ liệu đầu vào
+        if($request->Name == '' ){
+            return redirect('admin/slider/edit/'.$id)->with(['flash_level'=>'danger','flash_message'=>'Vui lòng điền đầy đủ các trường bắt buộc']);
+        }   
+        $slider = Slider::find($id);    
+        $slider->Name = $request->Name;
+        $slider->Sort = $request->Sort;
+        $slider->Status = $request->Status;
+        if($request->hasFile('images')){
+    $file = $request->file('images');
+    $random_digit = rand(000000000, 999999999);
+    $name = $random_digit.'-'.$file->getClientOriginalName();
+    $duoi = strtolower($file->getClientOriginalExtension());
+
+    
+    if($duoi != 'png' && $duoi != 'jpg' && $duoi != 'jpeg' && $duoi != 'svg'){
+        return back()->with(['flash_level' => 'danger', 'flash_message' => 'Định dạng ảnh không hợp lệ (chỉ hỗ trợ png, jpg, jpeg, svg)']);
+    }
+
+    
+    $file->move('images/news_slider', $name);
+
+    $img = Image::make('images/news_slider/'.$name);
+
+   
+    $filePath = "images/news_slider/".date('Ymd');
+    if (!file_exists($filePath)) {
+        mkdir("images/news_slider/".date('Ymd'), 0777, true);
+    }
+
+    
+    $img->fit(1920, 600);
+    
+    // Lưu ảnh vào folder ngày
+    $img->save('images/news_slider/'.date('Ymd').'/'.$name);
+
+    // Xóa ảnh gốc vừa upload (ảnh tạm ở dòng move trên) để tránh rác
+    if (file_exists('images/news_slider/'.$name)) {
+        unlink('images/news_slider/'.$name);
+    }
+
+    // Lưu đường dẫn vào CSDL (Biến $news phải được định nghĩa trước đó)
+    $slider->Images = date('Ymd').'/'.$name; 
+   
+}
+        $flag = $slider->save();
+        if($flag == true){
+            return redirect('admin/slider/edit/'.$id)->with(['flash_level'=>'success','flash_message'=>'Cập nhật slider thành công.']);
+        }else{
+            return redirect('admin/slider/edit/'.$id)->with(['flash_level'=>'danger','flash_message'=>'Cập nhật slider không thành công. Vui lòng thử lại!']);      
+        } 
+    }
+    public function slider_delete($id)
+{
+    $Slider = Slider::find($id);
+    $flag = $Slider->delete();
+    // Thực hiện xóa    
+    if($flag == true){
+            return redirect('admin/slider/list')->with(['flash_level'=>'success','flash_message'=>'Xóa slider thành công.']);
+        }else{
+            return redirect('admin/slider/list')->with(['flash_level'=>'danger','flash_message'=>'Xóa slider không thành công. Vui lòng thử lại!']);
+        }
+    }
+
+    }

@@ -6,7 +6,7 @@
 
 @section('content')
 <div class="container-fluid p-4">
-    <h1 class="mb-4" ><b>Chỉnh sửa thông tin trang</b></h1>
+    <h1 class="mb-4" ><b>Thêm tin mới</b></h1>
  <div class="card-footer">
             <a href="{{ url('admin/news/list') }} "><button type="submit" class="btn btn-primary">Quay lại</button></a>
         </div>
@@ -19,8 +19,9 @@
                         @csrf
                         <div class="form-group">
                             <select class="form-control" name="Status" id="Status">
-                                <option value="1" selected>Kích hoạt</option>
+                                
                                 <option value="0"  selected>Tắt</option>
+                                <option value="1" selected>Kích hoạt</option>
                             </select>
                         </div>
 
@@ -41,7 +42,7 @@
 
                         <div class="form-group mb-3">
                             <label for="fullname">Đường dẫn<span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" name="Alias" id="slug" rows="4" disabled ></input>
+                            <input type="text" class="form-control" name="Alias" id="slug" rows="4" readonly ></input>
                         </div>
 
                         <div class="form-group mb-3">

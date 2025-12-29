@@ -44,6 +44,12 @@
                         </li>
                     </ul>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ url('admin/slider/list') }}" class="nav-link  @yield('slider')">
+                        <i class="nav-icon fas fa-users"></i>
+                        <p>Quản lý slide show</p>
+                    </a>
+                </li>
                 @endif
                 @if(isset(Auth::user()->level) && Auth::user()->level == 1)
                 <li class="nav-item">

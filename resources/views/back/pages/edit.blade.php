@@ -30,7 +30,7 @@
                         </div>
                          <div class="form-group mb-3">
                             <label for="fullname">Đường dẫn<span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" name="Alias" id="slug" rows="4" value="{{ $Pages->Alias }}" disabled></input>
+                            <input type="text" class="form-control" name="Alias" id="slug" rows="4" value="{{ $Pages->Alias }}" readonly></input>
                         </div>
                         <div class="form-group mb-3">
                             <label for="phone">Font <span class="text-danger">*</span></label>

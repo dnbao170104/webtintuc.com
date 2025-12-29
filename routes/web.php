@@ -5,6 +5,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\BackController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\FrontController;
+use Symfony\Component\Routing\Route as RoutingRoute;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,7 +23,8 @@ Route::get('/login', function () {
 });
 // Frontend routes
 Route::get('/', [FrontController::class, 'home'])->name('home');
-Route::get('/lien-he', [FrontController::class, 'slug']);
+Route::get('/lien-he', [FrontController::class, 'contact'])->name('contact');
+Route::post('/dang-ky-nhan-tin-khuyen-mai', [FrontController::class, 'SubEmail'])->name('contact.sub.email');
 
 
 
@@ -103,5 +105,13 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function() {
         Route::get('delete/{id}', [BackController::class, 'news_delete'])->name('admin.news.delete');
 
     });
+   Route::group(['prefix' => 'slider'], function() {
+        Route::get('list', [BackController::class, 'slider_list'])->name('admin.slider.list');
+        Route::get('add', [BackController::class, 'slider_getAdd'])->name('admin.slider.add');  
+        Route::post('add', [BackController::class, 'slider_postAdd']);
+        Route::get('edit/{id}', [BackController::class, 'slider_getEdit'])->name('admin.slider.edit');  
+        Route::post('edit/{id}', [BackController::class, 'slider_postEdit'])->name('admin.slider.edit.post');
+        Route::get('delete/{id}', [BackController::class, 'slider_delete'])->name('admin.slider.delete');
 
+    });
 });
