@@ -6,23 +6,23 @@
     <div class="sidebar">
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu">
-                
+@if(isset(Auth::user()->level) && Auth::user()->level == 1)
                 <li class="nav-item">
-                    <a href="{{ route('admin.home') }}" class="nav-link">
+                    <a href="{{ url('admin/system') }}" class="nav-link @yield('system')">
                         <i class="fa-solid fa-gear"></i>
                         <p><b>Cấu hình hệ thống</b></p>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a href="{{ route('users.index') }}" class="nav-link">
+                    <a href="{{ url('admin/pages/list') }}" class="nav-link  @yield('page')">
                         <i class="nav-icon fas fa-users"></i>
                         <p>Quản lý trang</p>
                     </a>
                 </li>
 
                 <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
+                    <a href="#" class="nav-link @yield('news_cat') @yield('news')">
                         <i class="nav-icon fas fa-newspaper"></i>
                         <p>
                             Quản lý tin tức
@@ -31,34 +31,42 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="#" class="nav-link"> 
+                            <a href="{{ url('admin/news_cat/list') }}" class="nav-link @yield('news_cat')"> 
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Danh mục tin tức</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('posts.index') }}" class="nav-link">
+                            <a href="{{ url('admin/news/list') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Danh sách tin tức</p>
                             </a>
                         </li>
                     </ul>
                 </li>
-                
                 <li class="nav-item">
-                    <a href="{{ route('users.index') }}" class="nav-link">
+                    <a href="{{ url('admin/slider/list') }}" class="nav-link  @yield('slider')">
+                        <i class="nav-icon fas fa-users"></i>
+                        <p>Quản lý slide show</p>
+                    </a>
+                </li>
+                @endif
+                @if(isset(Auth::user()->level) && Auth::user()->level == 1)
+                <li class="nav-item">
+                    <a href="{{ url('admin/social/list') }}" class="nav-link  @yield('social')">
                         <i class="nav-icon fas fa-users"></i>
                         <p>Quản lý mạng xã hội</p>
                     </a>
                 </li>
+                @endif
                 <li class="nav-item">
-                    <a href="{{ route('users.index') }}" class="nav-link">
+                    <a href="{{ url('admin/newsletter/list') }}" class="nav-link  @yield('newsletter')">
                         <i class="nav-icon fas fa-users"></i>
                         <p>Quản lý khuyến mãi</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('users.index') }}" class="nav-link">
+                    <a href="{{ url('admin/contact/list') }}" class="nav-link  @yield('contact')">
                         <i class="nav-icon fas fa-users"></i>
                         <p>Quản lý liên hệ</p>
                     </a>
