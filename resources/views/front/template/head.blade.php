@@ -32,16 +32,26 @@
                         <div class="container-fluid">
                             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                                 @if(isset($Pages))
-                                    @foreach ($Pages as $item)
-                                        <li class="nav-item">
-                                            @if(isset($item->Font))
-                                                <a class="nav-link" href="{{ url($item->Alias) }}">{!! $item->Font !!} </a>
-                                            @else
-                                                <a class="nav-link" href="{{ url($item->Alias) }}">{{ $item->Name }}</a>
-                                            @endif
-                                        </li>
-                                    @endforeach
-                                @endif
+        @foreach ($Pages as $item)
+            <li class="nav-item">
+                {{-- LOGIC CHECK GIỐNG TRONG ẢNH --}}
+                
+                @if($item->Alias == '/')
+                    {{-- Trường hợp là Trang chủ --}}
+                    {{-- class="@yield('/')" nghĩa là nếu trang con có @section('/','active') thì thêm class active --}}
+                    <a class="nav-link @yield('/')" href="{{ url($item->Alias) }}">
+                        @if(isset($item->Font)) {!! $item->Font !!} @else {{ $item->Name }} @endif
+                    </a>
+                @else
+                    {{-- Trường hợp là các trang con (Liên hệ, Giới thiệu...) --}}
+                    {{-- class="@yield($item->Alias)" sẽ lấy nội dung từ section có tên trùng với Alias --}}
+                    <a class="nav-link @yield($item->Alias)" href="{{ url($item->Alias) }}">
+                        @if(isset($item->Font)) {!! $item->Font !!} @else {{ $item->Name }} @endif
+                    </a>
+                @endif
+            </li>
+        @endforeach
+    @endif
                             </ul>
                         </div>
                     </nav>

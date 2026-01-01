@@ -13,7 +13,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card card-primary">
-              <form action="{{ url('admin/pages/edit/' . $Pages->RowID) }}" method="POST">
+              <form action="{{ url('admin/pages/edit/' . $Pages->RowID) }}" method="POST" enctype="multipart/form-data">
                     <input type="hidden" name="id" >
                     <div class="card-body">
                         @csrf
@@ -32,6 +32,14 @@
                             <label for="fullname">Đường dẫn<span class="text-danger">*</span></label>
                             <input type="text" class="form-control" name="Alias" id="slug" rows="4" value="{{ $Pages->Alias }}" readonly></input>
                         </div>
+                         <div class="form-group mb-3">
+                            <label for="fullname">Ảnh đại diện<span class="text-danger">*</span></label><br>
+                             @if($Pages->Images!=null)
+                            <img src="{{ asset('images/page/' . $Pages->Images) }}" alt="Ảnh tin tức" width="150" />
+                            @endif
+                            <input type="file" class="form-control" name="Images" id="slug" rows="4" value="{{ $Pages->Images }}" readonly></input>
+                        </div>
+
                         <div class="form-group mb-3">
                             <label for="phone">Font <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="Font" name="Font"
@@ -58,7 +66,7 @@
                             </div>
                               <div>
                                 <label for="fullname">Mô tả tin tức <span class="text-danger">*</span></label>
-                                <textarea class="form-control" id="ckeditor" name="Description" rows="4" placeholder="Mô tả tin tức" >{{ $Pages->Descripstion }}</textarea>
+                                <textarea class="form-control" id="ckeditor" name="Description" rows="4" placeholder="Mô tả tin tức" >{{ $Pages->Description }}</textarea>
                         </div>
                     </div>
 

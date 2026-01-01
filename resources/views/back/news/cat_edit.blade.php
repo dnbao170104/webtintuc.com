@@ -25,8 +25,13 @@
                         </div>
                         <div class="form-group mb-3">
                             <label for="fullname">Tên trang <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="Name" name="Name" value="{{ $NewsCategory->Name }}"
-                                   placeholder="Tên trang">
+                            <input type="text" class="form-control" id="title" name="Name" value="{{ $NewsCategory->Name }}"
+                                   placeholder="Tên trang"onkeyup="ChangeToSlug();">
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="fullname">Đường dẫn<span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" name="Alias" id="slug" rows="4" readonly ></input>
                         </div>
 
                     </div>

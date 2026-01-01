@@ -216,6 +216,43 @@ class BackController extends Controller
         $page->MetaKeyword = $request->MetaKeyword;
         $page->MetaDescription = $request->MetaDescription;
         $page->Description = $request->Description;
+         if($request->hasFile('Images')){
+    $file = $request->file('Images');
+    $random_digit = rand(000000000, 999999999);
+    $name = $random_digit.'-'.$file->getClientOriginalName();
+    $duoi = strtolower($file->getClientOriginalExtension());
+
+    
+    if($duoi != 'png' && $duoi != 'jpg' && $duoi != 'jpeg' && $duoi != 'svg'){
+        return back()->with(['flash_level' => 'danger', 'flash_message' => 'Định dạng ảnh không hợp lệ (chỉ hỗ trợ png, jpg, jpeg, svg)']);
+    }
+
+
+    $file->move('images/page', $name);
+
+    $img = Image::make('images/page/'.$name);
+
+   
+    $filePath = "images/page/".date('Ymd');
+    if (!file_exists($filePath)) {
+        mkdir("images/page/".date('Ymd'), 0777, true);
+    }
+
+    
+    $img->fit(300, 250);
+    
+    // Lưu ảnh vào folder ngày
+    $img->save('images/page/'.date('Ymd').'/'.$name);
+
+    // Xóa ảnh gốc vừa upload (ảnh tạm ở dòng move trên) để tránh rác
+    if (file_exists('images/page/'.$name)) {
+        unlink('images/page/'.$name);
+    }
+
+    // Lưu đường dẫn vào CSDL (Biến $news phải được định nghĩa trước đó)
+    $page->Images = date('Ymd').'/'.$name; 
+   
+}
         $flag = $page->save();
         if($flag == true){
             return redirect('admin/pages/edit/'.$id)->with(['flash_level'=>'success','flash_message'=>'Cập nhật trang thành công.']);
@@ -334,6 +371,7 @@ class BackController extends Controller
         $news_cat = NewsCategory::find($id);    
         $news_cat->Name = $request->Name;
         $news_cat->Status = $request->Status;
+        $news_cat->Alias = $request->Alias;
         $flag = $news_cat->save();
         if($flag == true){
             return redirect('admin/news_cat/cat_edit/'.$id)->with(['flash_level'=>'success','flash_message'=>'Cập nhật danh mục tin tức thành công.']);

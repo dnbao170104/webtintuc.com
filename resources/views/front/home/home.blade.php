@@ -1,5 +1,10 @@
 @extends('front.template.master')
-
+@section('title', $PageInfo->Name)
+@section('description', $PageInfo->MetaDescription)
+@section('keywords',$PageInfo->MetaKeyword)
+@section('url',url('/'))
+@section('images',url('images/page/'.$PageInfo->Images))
+@section('/','active')
 @section('content')
 
 <style>
@@ -49,18 +54,18 @@
             <h3 class="section-title">Blog mới nhất</h3>
             <div class="row">
                 @if(isset($news) && count($news) > 0)
-                    @foreach($news as $item)
+                    @foreach($news as $item)        
                     <div class="col-md-4 col-sm-6 mb-4">
                         <div class="news-item">
-                            <a href="{{ url('tin-tuc/'.$item->Alias) }}">
+                            <a href="{{ url($item->Alias) }}">
                                 <img src="{{ url('images/news/'.$item->Images) }}" alt="{{ $item->Name }}" class="news-img">
                             </a>
                             <h4 class="news-title">
-                                <a href="{{ url('tin-tuc/'.$item->Alias) }}">{{ \Illuminate\Support\Str::limit($item->Name, 50) }}</a>
+                                <a href="{{ url($item->Alias) }}">{{ \Illuminate\Support\Str::limit($item->Name, 50) }}</a>
                             </h4>
                             <p class="small text-muted mb-1">
                                 {{ \Illuminate\Support\Str::limit($item->SmallDescription, 100) }}
-                                <a href="{{ url('tin-tuc/'.$item->Alias) }}" class="read-more">[read more]</a>
+                                <a href="{{ url($item->Alias) }}" class="read-more">[read more]</a>
                             </p>
                             
                         </div>
@@ -78,7 +83,7 @@
                 <img src="{{ url('public/images/img7.jpg') }}" alt="About" class="about-img">
                 <h5 class="text-warning fw-bold">Admin</h5>
                 <p class="small text-muted">Chào mừng bạn đến với Website Tin tức công nghệ và đời sống...
-                    <a href="{{ url('tin-tuc/'.$item->Alias) }}" class="read-more">[read more]</a>
+                    <a href="{{ url($item->Alias) }}" class="read-more">[read more]</a>
                 </p>
                 <div class="social-icons mt-3">
                     <a href="#" class="me-2"><i class="fab fa-facebook-f"></i></a>
@@ -99,19 +104,19 @@
                 @foreach($promotions as $item)
                 <div class="col-lg-3 col-md-6 mb-4">
                     <div class="news-item promotion-item">
-                        <a href="{{ url('tin-tuc/'.$item->Alias) }}">
+                        <a href="{{ url($item->Alias) }}">
                             <img src="{{ url('images/news/'.$item->Images) }}" alt="{{ $item->Name }}" class="news-img">
                         </a>
                         
                         <h4 class="news-title mt-3">
-                            <a href="{{ url('tin-tuc/'.$item->Alias) }}">
+                            <a href="{{ url($item->Alias) }}">
                                 {{ \Illuminate\Support\Str::limit($item->Name, 40) }}
                             </a>
                         </h4>
                         
                         <p class="small text-muted mb-2">
                             {{ \Illuminate\Support\Str::limit($item->SmallDescription, 80) }}
-                            <a href="{{ url('tin-tuc/'.$item->Alias) }}" class="read-more">[read more]</a>
+                            <a href="{{ url($item->Alias) }}" class="read-more">[read more]</a>
                         </p>
                         
                         
@@ -132,12 +137,12 @@
             @foreach($hot_news as $item)
             <div class="col-lg-3 col-md-6 mb-4">
                 <div class="news-item">
-                    <a href="{{ url('tin-tuc/'.$item->Alias) }}">
+                    <a href="{{ url($item->Alias) }}">
                         <img src="{{ url('images/news/'.$item->Images) }}" alt="{{ $item->Name }}" class="news-img">
                     </a>
                     
                     <h4 class="news-title mt-3">
-                        <a href="{{ url('tin-tuc/'.$item->Alias) }}">
+                        <a href="{{ url($item->Alias) }}">
                             {{ \Illuminate\Support\Str::limit($item->Name, 50) }}
                         </a>
                     </h4>
@@ -146,7 +151,7 @@
                         {{ \Illuminate\Support\Str::limit($item->SmallDescription, 100) }}
                     </p>
                     
-                    <a href="{{ url('tin-tuc/'.$item->Alias) }}" class="read-more">[read more]</a>
+                    <a href="{{ url($item->Alias) }}" class="read-more">[read more]</a>
                 </div>
             </div>
             @endforeach

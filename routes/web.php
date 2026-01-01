@@ -24,8 +24,19 @@ Route::get('/login', function () {
 // Frontend routes
 Route::get('/', [FrontController::class, 'home'])->name('home');
 Route::get('/lien-he', [FrontController::class, 'contact'])->name('contact');
+Route::post('/lien-he', [FrontController::class, 'contact_post'])->name('contact.post');
 Route::post('/dang-ky-nhan-tin-khuyen-mai', [FrontController::class, 'SubEmail'])->name('contact.sub.email');
+Route::get('/ve-chung-toi', [FrontController::class, 'about'])->name('about');
 
+// --- Đặt đoạn này ở cuối file web.php ---
+
+// 1. Ưu tiên bắt các link có đuôi .html (Chi tiết bài viết)
+// Ví dụ: /tin-tuc-hot.html -> $slug sẽ là 'tin-tuc-hot'
+// Route::get('{Slug}.html', [FrontController::class, 'slugHtml'])->name('slug.html');
+
+// 2. Sau đó mới bắt các link còn lại (Danh mục tin, Trang giới thiệu...)
+// Ví dụ: /xu-huong-thoi-trang
+Route::get('{slug}', [FrontController::class, 'slug'])->name('slug');
 
 
 
