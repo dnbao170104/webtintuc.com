@@ -56,12 +56,23 @@
                         </div>
                     </nav>
                 </div>
-                <div class="col-md-3">
-                    <form action="" method="GET" class="search-box">
-                        <input type="text" placeholder="Tìm kiếm...">
-                        <button type="submit"><i class="fa fa-search"></i></button>
-                    </form>
-                </div>
+<div class="col-md-3">
+    <form action="{{ route('search') }}" method="GET" class="search-box">
+        {{-- Sử dụng input-group để nối Input và Button liền mạch --}}
+        <div class="input-group">
+            <input type="search" 
+                   class="form-control" 
+                   name="key" 
+                   placeholder="Tìm kiếm tin tức..." 
+                   value="{{ request()->get('key') }}" 
+                   aria-label="Search">
+            
+            <button class="btn btn-outline-warning" type="submit">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+        </div>
+    </form>
+</div>
             </div>
         </div>
     </div>

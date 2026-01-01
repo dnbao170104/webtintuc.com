@@ -27,7 +27,8 @@ Route::get('/lien-he', [FrontController::class, 'contact'])->name('contact');
 Route::post('/lien-he', [FrontController::class, 'contact_post'])->name('contact.post');
 Route::post('/dang-ky-nhan-tin-khuyen-mai', [FrontController::class, 'SubEmail'])->name('contact.sub.email');
 Route::get('/ve-chung-toi', [FrontController::class, 'about'])->name('about');
-
+// Route tìm kiếm
+Route::get('/tim-kiem', [FrontController::class, 'search'])->name('search');
 // --- Đặt đoạn này ở cuối file web.php ---
 
 // 1. Ưu tiên bắt các link có đuôi .html (Chi tiết bài viết)

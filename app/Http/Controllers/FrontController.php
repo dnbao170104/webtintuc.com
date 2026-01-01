@@ -200,4 +200,28 @@ class FrontController extends Controller
         // Nếu không tìm thấy ở đâu cả -> 404 thật
         return abort(404);
     }
+    public function search(Request $request)
+    {
+        // 1. Lấy từ khóa từ URL (?key=...)
+        $key = $request->input('key');
+
+        // Nếu từ khóa rỗng thì quay lại hoặc báo lỗi
+        if (!$key) {
+            return redirect()->back()->with('error', 'Vui lòng nhập từ khóa!');
+        }
+
+        // 2. Tìm kiếm trong bảng 'news'
+        // WHERE Name LIKE '%từ_khóa%' (Tìm tương đối)
+        $listNews = DB::table('news')
+            ->where('Status', 1)
+            ->where('Name', 'LIKE', '%' . $key . '%') // Quan trọng nhất dòng này
+            ->orderBy('RowID', 'DESC')
+            ->paginate(12);
+
+        // Giữ tham số 'key' trên URL khi bấm chuyển trang (Phân trang)
+        $listNews->appends(['key' => $key]);
+
+        // 3. Trả về view hiển thị kết quả
+        return view('front.news.search', compact('listNews', 'key'));
+    }
 }
